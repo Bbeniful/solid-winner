@@ -1,0 +1,404 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Magunkért
+
+Magunkért mobile app api
+
+## Authorization [/auth]
+
+- Minden http request `Content-type: application/json`-t küld és fogad, kivéve, ha mást írunk lentebb
+- Minden API endpoint standard http headerekkel és http hibakódokkal dolgozik
+- Ha a kliensnek van auth tokene (azaz “be van jelentkezve”), akkor minden további http requesthez csatolnia kell egy `Authorization: Bearer <auth token>` headert
+
+### Login [POST /auth/login]
+
+Bejelentkezés unique_id-val, email cimmel es jelszoval.
+Ha van email cim es jelszo, akkor hozzakotjuk a unique_id felhasznalot az email cimes felhasznalohoz.
+Egy email cimes felhasznalohoz tobb unique_id felhasznalo is tartozhat.
+
+Ez az endpoint sikeres bejelentkezés esetén egy JWT tokent ( https://jwt.io ) ad vissza. A token a következőket tartalmazza:
+
+```
+{
+    "roles": [], //array of strings, másolat a belépett user entity `roles` mezőjéről
+    "sub": 2, //string/int user unique id
+    "iss": "http://barkler.dev/v1/auth/login", //string token származási helye
+    "iat": 1464959200, //int unix timestamp, token létrehozásának időpontja
+    "exp": 1464962800, //int unix timestamp, token lejáratának időpontja
+    "nbf": 1464959200, //int unix timestamp, token érvényesség kezdetének időpontja
+    "jti": "45ac5cd03267ce11158177ec61c1bbc5" //string token unique id
+ }
+```
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "unique_id": "3459354937" (string),
+                "email": "a@b.com" (optional, string),
+                "password": "1234" (optional, string)
+            }
+
++ Response 200 (application/json)
+
+    + Body
+        
+            {
+                "token": "auth token"
+            }
+
+### Renew token [POST /auth/token]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "token": "old token" (string)
+            }
+
++ Response 200 (application/json)
+
+    + Body
+        
+            {
+                "token": "new token" (string)
+            }
+
+### Reset password [POST /auth/password/reset]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "email": "a@b.com" (string)
+            }
+
++ Response 200 (application/json)
+
++ Response 404 (application/json)
+
+### Facebook auth [POST /auth/facebook]
+
+Bejelentkezes facebook auth tokennel, es hozzakotes a unique_id felhasznalohoz.
+Amennyiben nem letezik a facebook-os felhasznalo, letrehoz az API egy ujat, es hozzakoti a unique_id felhasznalohoz.
+
++ Request (application/json)
+        
+    + Body
+    
+            {
+                "unique_id": "3459354937" (string),
+                "token": "facebook auth token" (string),
+                "redirect_uri": "" (string)
+            }
+            
++ Response 200 (application/json)
+
+    + Body
+        
+            {
+                "token": "auth token",
+            }
+            
++ Response 201 (application/json)
+
+    + Body
+        
+            {
+                "token": "auth token",
+            }
+
+## Static content [/static_content]
+
+### Privacy [GET /static_content/privacy]
+
++ Response 200 (application/json)
+
+    + Attribute (Static_Privacy)
+
+## User [/user]
+
+### Create new user [POST]
+
+Ha nincsen email cim es jelszo, akkor letrehozza a felhasznalot a unique_id-val.
+Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozzakoti a unique_id felhasznalohoz.
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "unique_id": "9847597349507203954" (string),
+                "email": "a@b.com" (optional, string),
+                "password": "1234" (optional, string)
+            }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "token": "auth token"
+            }
+            
+## Own user data [/user/me]
+
+### Get my user data [GET]
+
++ Response 200 (application/json)
+
+    + Attribute (User)
+
+## User data [/user/{id}]
+
++ Parameters
+    + id (required, number, `1`) - User ID
+
+### Get user data [GET]
+
++ Response 200 (application/json)
+
+    + Attribute (User)
+
+### Update user data [PUT]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "name": "new name" (string),
+                "gender": "male|female" (string),
+                "date_of_birth": "1999-09-09" (string),
+                "birthplace": "Budapest" (string),
+                "password": "ksdjhflkashdf" (string)
+            }
+
++ Response 200 (application/json)
+
+    + Attribute (User)
+
+## Push notification [/device]
+
+### Register device [POST /device]
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "provider": "apple|android" (string),
+                "device_token": "298736481635489761894" (string)
+            }
+            
++ Response 200 (application/json)
+
+### Configure push messages [PUT /device/{device_token}]
+
++ Parameters
+    + device_token (required, string, `38946598374590`) - Device Token
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "question": true (boolean)
+            }
+            
++ Response 200 (application/json)
+
+## Question [/question{?page,from,order_by,limit}]
+
+### List Questions [GET]
+
++ Parameters
+    + page (optional, number, `1`)
+    + from (optional, string, `2017-02-09 23:59:59`)
+    + order_by (optional, string, `published|answers`)
+    + limit (optional, number, `7`)
+
++ Response 200 (application/json)
+
+    + Attribute (Pager_question)
+
+### Get a single Question [GET /question/{id}]
+
++ Parameters
+    + id (required, number, `1`)
+
++ Response 200 (application/json)
+
+    + Attribute (Question)            
+    
++ Response 404 (application/json)
+
+### Answer a question Question [POST /question/{id}/answer]
+
++ Parameters
+    + id (required, number, `1`)
+
++ Request (application/json)
+
+    + Attributes
+        + answer (Answer)             
+             
++ Response 201 (application/json)
+
+    + Attribute (Question)
+    
+## News [/news{?page,from,order_by,limit}]
+
+### List News [GET]
+
++ Parameters
+    + page (optional, number, `1`)
+    + from (optional, string, `2017-02-09 23:59:59`)
+    + order_by (optional, string, `published|answers`)
+    + limit (optional, number, `7`)
+
++ Response 200 (application/json)
+
+    + Attribute (Pager_news)
+
+### Get a single News [GET /news/{id}]
+
++ Parameters
+    + id (required, number, `1`)
+
++ Response 200 (application/json)
+
+    + Attribute (News)            
+    
++ Response 404 (application/json)
+
+## Area [/area]
+
+### List Constituency [POST]
+
++ Parameters
+   
++ Request (application/json)
+  
+   + Body
+            {
+                "country": "9847597349507203954" (string),
+                "zip_code": "apple@apple.com" (optional, string),
+                "street": "appletree" (optional, string)
+                "house_number": "1234" (optional, string)
+            }
+
++ Response 200 (application/json)
+
+    + Body
+        
+            {
+                "area": "auth token"
+            }
+
+
+
+
+# Data structures
+
+## User (object)
+
++ id: 1 (number)
++ name: `name of the user` (optional, string)
++ gender: `male|female` (optional, string)
++ date_of_birth: `1999-09-09` (optional, string)
++ birthplace: `Budapest` (optional, string)
++ email: `a@b.com` (required, string)
+
+
+## `Static_Privacy` (object)
+
++ id: 1 (number)
++ title: `Privacy` (string)
++ slug: `privacy` (string)
++ text: `<p>Privacy text</p>` (string)
+
+## `Pager_question` (object)
+
++ total: 4 (number)
++ per_page: 15 (number)
++ current_page: 1 (number)
++ last_page: 1 (number)
++ from: 1 (number)
++ to: 2 (number)
++ data: Question, Question_voted, Question, Question_voted (array[Question])
+
+## `Pager_news` (object)
+
++ total: 4 (number)
++ per_page: 15 (number)
++ current_page: 1 (number)
++ last_page: 1 (number)
++ from: 1 (number)
++ to: 2 (number)
++ data: News, News, News, News (array[News])
+
+
+## Question (object)
+
++ id: 1 (number)
++ text: `Favourite programming language?` (string)
++ image: `https://kep.index.hu/1/0/1463/14632/146328/14632801_2c0608d077090bfa75d0b82c8499a237_wm.jpg` (string)
++ published_at: `2017-02-08 09:09:09` (string)
++ answers: Answer, Answer_b, Answer_c, Answer_d (array[Answer])
++ expired: false (boolean)
++ voted: false (boolean)
+
+## `Question_voted` (object)
+
++ id: 1 (number)
++ text: `Favourite programming language?` (string)
++ image: `https://kep.index.hu/1/0/1463/14634/146344/14634417_92a3e7cfc858e5b565c264febaace52e_wm.jpg` (string)
++ published_at: `2017-02-08 09:09:09` (string)
++ answers: Answer, Answer_b, Answer_c, Answer_d (array[Answer])
++ expired: false (boolean)
++ voted: true (boolean)
+
+## Answer (object)
+
++ id: 1 (number)
++ text: `Swift` (string)
++ result: 0 (optional, number)
++ selected: true (optional, boolean)
+
+## `Answer_b` (object)
+
++ id: 2 (number)
++ text: `Python` (string)
++ image: `https://magunkert.com/answer/2/image.jpg` (optional, string)
++ result: 15 (optional, number)
++ selected: false (optional, boolean)
+
+## `Answer_c` (object)
+
++ id: 3 (number)
++ text: `C++` (string)
++ image: `https://magunkert.com/answer/3/image.jpg` (optional, string)
++ result: 35 (optional, number)
++ selected: false (optional, boolean)
+
+## `Answer_d` (object)
+
++ id: 4 (number)
++ text: `Java` (string)
++ image: `https://magunkert.com/answer/4/image.jpg` (optional, string)
++ result: 50 (optional, number)
++ selected: false (optional, boolean)
+
+## News (object)
+
++ id: 1 (number)
++ title: `News Title` (string)
++ image: `https://kep.index.hu/1/0/1463/14632/146328/14632801_2c0608d077090bfa75d0b82c8499a237_wm.jpg` (string)
++ content: `The content` (string)
++ lead: `The co...` (string) 
++ published_at: `2017-02-08 09:09:09` (string)
