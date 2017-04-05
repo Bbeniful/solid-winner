@@ -164,6 +164,12 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 
     + Attribute (User)
 
+### Get user votes [GET /user/{id}/vote]
+
++ Response 200 (application/json)
+
+    + Attribute (array[Vote])
+
 ### Update user data [PUT]
 
 + Request (application/json)
@@ -226,7 +232,7 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 
     + Attribute (Pager_question)
 
-### Get a single Question [GET /question/{id}]
+### Get a single question [GET /question/{id}]
 
 + Parameters
     + id (required, number, `1`)
@@ -237,7 +243,7 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
     
 + Response 404 (application/json)
 
-### Answer a question Question [POST /question/{id}/answer]
+### Answer a question [POST /question/{id}/answer]
 
 + Parameters
     + id (required, number, `1`)
@@ -273,33 +279,48 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
     
 + Response 404 (application/json)
 
-## Area [/area]
+## Constituency [/constituency]
 
-### List Constituency [POST]
+### Get my constituency [GET /constituency{?county_id,township_id,street_id,street_number}]
 
 + Parameters
-   
+    + county_id (required, number, `2`)
+    + township_id (required, number, `5`)
+    + street_id (required, number, `3`)
+    + street_number (required, number, `12`)
+
 + Request (application/json)
   
-   + Body
-            {
-                "country": "9847597349507203954" (string),
-                "zip_code": "apple@apple.com" (optional, string),
-                "street": "appletree" (optional, string)
-                "house_number": "1234" (optional, string)
-            }
++ Response 200 (application/json)
+
+    + Attribute (array[Constituency])
+
+### Get campaigners [GET /constituency/{id}/campaigners]
+
++ Parameters
+    + id (required, number, `1`)
 
 + Response 200 (application/json)
 
+    + Attributes
+        + campaigners (array[Campaigner])
+
+### Vote for campaigner [POST /constituency/{id}/campaigner/{campaigner_id}/vote]
+
++ Parameters
+    + id (required, number,`1`)
+    + campaigner_id (required, number, `1`)
+
++ Request (application/json)
+
     + Body
-        
+    
             {
-                "area": "auth token"
+                "vote": "yes|no" (string)
             }
 
-
-
-
++ Response 200 (application/json)
+    
 # Data structures
 
 ## User (object)
@@ -408,3 +429,22 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 + content: `<strong>The content</strong><p>This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph</p><p>This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph</p><p>This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph</p><p>This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph</p><p>This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph - This is a long paragraph</p>` (required, string)
 + lead: `This is a long lead - This is a long lead - This is a long lead - This is a long lead - This is a long lead - This is a long lead - This is a long lead - This is a long lead - This is a long lead - This is a long lead` (optional, string)
 + published_at: `2017-03-08 09:09:09` (required, string)
+
+## Constituency (object)
+
++ id: 1 (number)
+
+## Campaigner (object)
+
++ id: 1 (number)
++ name: `Pityinger László` (required, string)
++ image: `https://static.origos.hu/s/img/i/1309/20130911-dopeman-kiosztotta-hajas-lacit-szepulj-rovat.jpg` (required, string)
++ supporter: `Magunkért` (required, string)
++ short_description: `magyar rapper, producer, előadó` (required, string)
++ description: `This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. \n\nThis is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.` (required, string)
++ video_url: `https://r17---sn-c0q7ln76.googlevideo.com/videoplayback?source=youtube&mime=video%2Fmp4&upn=RDn6k9DRPIA&sparams=dur,expire,id,initcwndbps,ip,ipbits,ipbypass,itag,lmt,mime,mm,mn,ms,mv,pl,ratebypass,source,upn&ip=109.74.61.49&ipbits=0&lmt=1429961874094352&key=cms1&expire=1491423276&id=o-AMvsQ-PNElS9s0pK7knvTiFpcmBEjSRsnQIzECMAwoVh&dur=232.780&ratebypass=yes&pl=20&itag=18&signature=57BE1FEE76CB13650C8DF4AF6B7992CF380E3E60.4804A80D1D1F4054725C4A841A3D0B1761996305&title=DopeMan-Lopni&redirect_counter=1&req_id=d88efe344ed7a3ee&cms_redirect=yes&ipbypass=yes&mm=31&mn=sn-c0q7ln76&ms=au&mt=1491401605&mv=m` (optional, string)
+
+## Vote (object)
+
++ id: 1 (number)
++ type: `yes` (string)
