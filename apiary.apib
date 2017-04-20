@@ -302,7 +302,7 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 
 + Response 200 (application/json)
 
-    + Attributes (array[Campaigner])
+    + Attributes (array[Campaigner, Campaigner_2, Campaigner, Campaigner_2])
 
 ### Vote for campaigner [POST /constituency/{id}/campaigner/{campaigner_id}/vote]
 
@@ -442,6 +442,16 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 + short_description: `magyar rapper, producer, előadó` (required, string)
 + description: `This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.\n\nThis is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.\n\nThis is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.\n\nThis is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.` (required, string)
 + `video_url`: `https://develop.clapp.eu/willo/BigBuckBunny.mp4` (optional, string)
+
+## `Campaigner_2` (object)
+
++ id: 2 (number)
++ name: `Barack Obama` (required, string)
++ image: `https://www.caribjournal.com/wp-content/uploads/2015/01/obama1.jpg` (required, string)
++ supporter: `Magunkért` (required, string)
++ short_description: `ifj. Barack Obama, volt amerikai elnok, politikus` (required, string)
++ description: `This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.\n\nThis is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.\n\nThis is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.\n\nThis is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner. This is the long description of the current campaigner.` (required, string)
++ `video_url`: `https://develop.clapp.eu/willo/toystory.mp4` (optional, string)
 
 ## Vote (object)
 
