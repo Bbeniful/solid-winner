@@ -319,6 +319,45 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
             }
 
 + Response 200 (application/json)
+
+### Counties [GET /county{?query}]
+
++ Parameters
+    + query (required, string,`Borso`)
+
++ Response 200 (application/json)
+
+    + Attributes (array[County, County, County, County])
+    
+### Cities [GET /city{?query,county_id}]
+
++ Parameters
+    + query (required, string,`bud`)
+    + county_id (required, number,`1`)
+
++ Response 200 (application/json)
+
+    + Attributes (array[City, City, City, City])
+    
+### Streets [GET /street{?query,city_id}]
+
++ Parameters
+    + query (required, string,`main str`)
+    + city_id (required, number,`1`)
+
++ Response 200 (application/json)
+
+    + Attributes (array[Street, Street, Street, Street])
+    
+### Street Details [GET /street_details{?query,street_id}]
+
++ Parameters
+    + query (required, string,`main str`)
+    + street_id (required, number,`1`)
+
++ Response 200 (application/json)
+
+    + Attributes (array[StreetDetails, StreetDetails, StreetDetails, StreetDetails])
     
 # Data structures
 
@@ -457,3 +496,39 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 
 + id: 1 (number)
 + type: `yes` (string)
+
+## County (object)
+
++ id: 1 (number)
++ name: `Fejér` (string)
+
+## City (object)
+
++ id: 1 (number)
++ name: `Mezőkövesd` (string)
++ county_id: 1 (number)
++ constituency_id: 1 (number)
+
+## Street (object)
+
++ id: 1 (number)
++ name: `Fő utca` (string)
++ city_id: 1 (number)
++ county_id: 1 (number)
++ constituency_id: 1 (number)
+
+## StreetDetails (object)
+
++ id: 1 (number)
++ name: `Görgey Artúr út (2 házszám)-tól - (12 házszám)-ig, páros házszámok` (string)
++ from_house_number: `1` (optional, string)
++ from_building: `1` (optional, string) 
++ from_staircase: `1` (optional, string) 
++ to_house_number: `9999` (optional, string) 
++ to_building: `2` (optional, string) 
++ to_staircase: `2` (optional, string),
++ range: `páratlan házszámok` (optional, string) 
++ street_id: 1 (number)
++ city_id: 1 (number)
++ county_id: 1 (number)
++ constituency_id: 1 (number)
