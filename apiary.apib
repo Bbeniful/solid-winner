@@ -323,7 +323,7 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 ### Counties [GET /county{?query}]
 
 + Parameters
-    + query (required, string,`Borso`)
+    + query (optional, string,`Borso`)
 
 + Response 200 (application/json)
 
@@ -332,8 +332,8 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 ### Cities [GET /city{?query,county_id}]
 
 + Parameters
-    + query (required, string,`bud`)
-    + county_id (required, number,`1`)
+    + query (optional, string,`bud`)
+    + county_id (optional, number,`1`)
 
 + Response 200 (application/json)
 
@@ -342,8 +342,8 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 ### Streets [GET /street{?query,city_id}]
 
 + Parameters
-    + query (required, string,`main str`)
-    + city_id (required, number,`1`)
+    + query (optional, string,`main str`)
+    + city_id (optional, number,`1`)
 
 + Response 200 (application/json)
 
@@ -352,8 +352,8 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 ### Street Details [GET /street_details{?query,street_id}]
 
 + Parameters
-    + query (required, string,`main str`)
-    + street_id (required, number,`1`)
+    + query (optional, string,`main str`) 
+    + street_id (optional, number,`1`)
 
 + Response 200 (application/json)
 
