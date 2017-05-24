@@ -359,6 +359,22 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 
     + Attributes (array[StreetDetails, StreetDetails, StreetDetails, StreetDetails])
     
+    
+    
+## AR [/poster]
+
+### Poster Replace[GET /poster{?last_modified}]
+
++ Parameters
+    + last_modified (optional,date,`2017-06-02 10:10:10`)
+    
++ Response 200 (application/json)
+
+    + Attributes (ARResponse)
+
++ Response 404 (application/json)
+
+    
 # Data structures
 
 ## User (object)
@@ -533,3 +549,20 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 + city_id: 1 (number)
 + county_id: 1 (number)
 + constituency_id: 1 (number)
+
+## VuforiaFiles (object) 
+
++ dat_url: `https://examplefile/example.dat` (required, string)
++ xml_url: `https://examplefile/example.xml` (required, string)
+
+## ARResponse (object)
+
++ source
+    + Include VuforiaFiles
++ replace_images: ReplaceImages,ReplaceImages,ReplaceImages (required, array[ReplaceImages])
+
+
+## ReplaceImages (object)
+
++ keys: `imageKey` (required, array[string])
++ image_url: `https://examplefile/imageKey.jpg` (required, string)
