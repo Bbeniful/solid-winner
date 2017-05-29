@@ -366,11 +366,13 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 ### Poster Replace[GET /poster{?last_modified}]
 
 + Parameters
-    + last_modified (optional,date,`2017-06-02 10:10:10`)
+    + last_modified (optional,timestamp,`1495698819`)
     
 + Response 200 (application/json)
 
     + Attributes (ARResponse)
+    
++ Response 304 (application/json)
 
 + Response 404 (application/json)
 
@@ -564,5 +566,5 @@ Ha van email cim es jelszo, akkor letrehoz egy email cimes felhasznalot, es hozz
 
 ## ReplaceImages (object)
 
-+ keys: `imageKey` (required, array[string])
++ keys: `pingvin`,`imageKey2`,`imageKey3` (required, array[string])
 + image_url: `https://examplefile/ajshdahdkshkdka312313121.jpg` (required, string)
